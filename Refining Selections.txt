@@ -1,0 +1,89 @@
+USE bookshop;
+
+INSERT INTO books
+    (title, author_fname, author_lname, released_year, stock_quantity, pages)
+    VALUES ('10% Happier', 'Dan', 'Harris', 2014, 29, 256), 
+           ('fake_book', 'Freida', 'Harris', 2001, 287, 428),
+           ('Lincoln In The Bardo', 'George', 'Saunders', 2017, 1000, 367);
+
+
+-- Display distinct values of author name
+SELECT 
+ DISTINCT 
+  CONCAT(
+      author_fname, ' ', author_lname 
+  ) As author_fname
+FROM
+ books;
+
+ -- Aother way of using DISTINCT
+ SELECT DISTINCT author_fname, author_lname FROM books;
+
+ -- ORDER BY using a number
+SELECT author_fname, released_year, title FROM books
+ORDER BY 2;
+ 
+ -- ORDER BY, add a secondary sorting condition
+ SELECT author_lname, released_year, title
+ FROM books
+ ORDER BY author_lname, released_year; -- released_year is secondary condition
+
+ -- ORDER BY using Alias
+ SELECT CONCAT(author_fname, ' ', author_lname) AS author
+ FROM books
+ ORDER BY author;
+
+ -- Display first five books y release date
+ SELECT title from books
+ ORDER by released_year LIMIT 5;
+
+ -- Display 5 recent books without displaying the latest one
+ SELECT title, released_year from books
+ ORDER BY released_year DESC LIMIT 1,5; -- 1 shows start position and 5 shows no of rows
+
+ -- LIKE operator
+ SELECT title, author_fname from books
+ WHERE author_fname LIKE '%da%'; -- % means wildcard
+
+ --Display author with four letters in their first name
+ SELECT author_fname from books
+ WHERE author_fname LIKE '____'; -- these underscores are also wildcards
+
+ -- Display title with a % sign in it
+ SELECT title from books
+ WHERE title LIKE '%/%%';
+
+ -- CHALLENEGES
+ -- Display titles which has "stories" word in it as title
+SELECT title AS titles from books
+WHERE title LIKE '%stories%';
+
+-- Find the longest book
+SELECT title As Longest_book, pages FROM books
+ORDER BY pages DESC LIMIT 1;
+
+-- Display the summary containing title and year for the most recent 3 books
+SELECT CONCAT(title, ' - ', released_year) AS SUMMARY
+FROM books
+ORDER BY released_year DESC LIMIT 3;
+
+-- Display author first name and last name where last name has a space char
+SELECT title, author_lname FROM books
+WHERE author_lname LIKE '% %';
+
+-- Display 3 books with lowest stock
+SELECT title,released_year, stock_quantity
+FROM books
+ORDER BY stock_quantity LIMIT 3;
+
+-- Display title and author_lname SORT by author_lname, then by title
+SELECT author_lname, title
+FROM books
+ORDER BY author_lname, title;
+
+-- Display a text concat with author_fullname in all caps AS yell! sorted by lastname
+SELECT 
+ CONCAT('MY FAVOURITE AUTHOR IS ', UPPER(author_fname), ' ', UCASE(author_lname), ' !')
+ AS yell
+ FROM books
+ORDER BY author_lname;
