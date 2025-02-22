@@ -1,0 +1,105 @@
+USE bookshop;
+
+-- Count number of books
+SELECT COUNT(*) FROM books; -- COUNT(*) shows counting of all rows
+
+-- Display number of authors 
+SELECT COUNT(DISTINCT author_fname) from books;
+
+-- Display number of book names where we have the word "the"
+SELECT COUNT(*) FROM books WHERE title LIKE '%the%';
+
+--Group by
+SELECT author_lname, COUNT(*)
+FROM books
+GROUP BY author_lname;
+
+--GROUP BY WITH COUNT
+SELECT author_lname, COUNT(*) AS books_written FROM books
+GROUP BY author_lname
+ORDER BY books_written;
+
+
+-- Min amd MAX
+SELECT MAX(pages) FROM books;
+ 
+SELECT MIN(author_lname) FROM books;
+
+
+-- SUBQUERY
+-- Display title of the largest book
+SELECT title, pages FROM books
+WHERE pages = (SELECT MAX(pages) FROM books);
+
+--Display book with earliest published date
+SELECT title, released_year FROM books
+WHERE released_year = (SELECT MIN(released_year) FROM books);
+
+-- Seondary group by
+SELECT author_lname, COUNT(*) FROM books
+GROUP BY author_lname, author_fname;
+
+SELECT CONCAT(author_fname, ' ', author_lname) AS author, COUNT(*) 
+FROM books
+GROUP BY author;
+
+--Find the year in which each athor published their first book
+SELECT author_fname, author_lname, MIN(released_year)
+FROM books
+GROUP BY author_fname, author_lname;
+
+-- display author name, their book count, their latest release year and first release year
+SELECT author_fname, COUNT(*) as books_written,
+ MIN(released_year) as earliest_release ,
+  MAX(released_year) AS latest_release,
+  MAX(pages) AS longest_page_count
+FROM books
+GROUP by author_fname;
+
+
+-- Display author_fname, pages's sum
+SELECT author_fname, SUM(pages) AS total_pages
+FROM books
+GROUP BY author_fname
+ORDER BY total_pages ;
+
+-- Display the avg released year across all book
+SELECT AVG(released_year) FROM books;
+
+-- Calculate avg stock quantity for books released in the same year
+SELECT released_year, AVG(stock_quantity) as stock, COUNT(*) As no_of_books
+FROM books
+GROUP BY released_year;
+
+-- CHALLENGES
+-- Display number of books in db
+SELECT COUNT(*) AS no_of_books from books;
+
+-- Display no of books released each year
+SELECT released_year, COUNT(*) AS no_of_books
+FROM books
+GROUP BY released_year;
+
+-- Display no of books in stock
+SELECT SUM(stock_quantity) AS book_in_stock
+FROM books;
+
+-- Display avg release year for each author
+SELECT CONCAT(author_fname, ' ', author_lname) AS author,
+AVG(released_year) AS avg_release
+FROM books
+GROUP BY author;
+
+-- Display full name of the author who wrote the longest books
+SELECT CONCAT(author_fname, ' ', author_lname) as full_name, title FROM books
+WHERE pages = (SELECT MAX(pages) FROM books);
+
+
+-- Display each release year, 
+-- no of books released that year, 
+--avg pages of the released books
+--ORDERED BY RELEASED YEAR
+SELECT released_year, COUNT(*) AS No_of_books, AVG(pages) AS avg_pages
+FROM books
+GROUP BY released_year
+ORDER BY released_year;
