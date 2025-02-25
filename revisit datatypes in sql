@@ -1,0 +1,132 @@
+CREATE DATABASE practice;
+
+USE practice;
+
+CREATE TABLE people (
+	name VARCHAR(100),
+    birthdate DATE,
+    birthtime TIME,
+    birthdt DATETIME
+);
+
+
+INSERT INTO people (name, birthdate, birthtime, birthdt)
+VALUES ('Elton', '2000-12-25', '11:00:00', '2000-12-25 11:00:00');
+ 
+INSERT INTO people (name, birthdate, birthtime, birthdt)
+VALUES ('Lulu', '1985-04-11', '9:45:10', '1985-04-11 9:45:10');
+ 
+INSERT INTO people (name, birthdate, birthtime, birthdt)
+VALUES ('Juan', '2020-08-15', '23:59:00', '2020-08-15 23:59:00');
+
+-- current date, current time
+SELECT CURDATE();
+
+SELECT CURTIME();
+
+INSERT INTO people (name, birthdate, birthtime, birthdt)
+VALUES ('Hazel', CURDATE(), CURTIME(), NOW());
+
+-- DAY is short for DAYOFMONTH()
+SELECT birthdate, DAY(birthdate) AS day FROM people;
+
+--dayofweek() tells which day is it in the week
+SELECT birthdate, DAY(birthdate), DAYOFWEEK(birthdate), DAYOFYEAR(birthdate) FROM people;
+
+-- MONTHNAME() shows month value
+SELECT 
+    birthdate,
+    MONTHNAME(birthdate),
+    YEAR(birthdate)
+FROM people;
+
+-- MINUTE(), SECOND(), AND HOUR() shows respective values from a time value
+SELECT HOUR(birthtime), MINUTE(birthtime), SECOND(birthtime) FROM people;
+
+-- DATE() & TIME()
+SELECT DATE(birthdt), TIME(birthdt), birthdt FROM people;
+
+-- DATE_FORMAT() uses certain predefined parameters, their values are avl on official website doc
+SELECT birthdate, DATE_FORMAT(birthdate, '%a %b %D') FROM people;
+ 
+SELECT birthdt, DATE_FORMAT(birthdt, '%H:%i') FROM people;
+ 
+SELECT birthdt, DATE_FORMAT(birthdt, 'BORN ON: %r') FROM people;
+
+-- DATEDIFF(date1, date2) subtracts and reurns the number of days between them
+SELECT birthdate, DATEDIFF(CURDATE(), birthdate) FROM people;
+
+-- DATEADD(date, INTERVAL enter interval)
+-- DATE_SUB(SAME AS ABOVE)
+SELECT DATE_ADD(CURDATE(), INTERVAL 1 year) AS DATEadd, DATE_SUB(CURDATE(), INTERVAL 1 YEAR);
+
+-- Apply it in query
+SELECT birthdate, DATE_ADD(birthdate, INTERVAL 18 YEAR) FROM people;
+
+--TIMEDIFF()
+SELECT TIMEDIFF(CURTIME(), birthtime) FROM people;
+
+-- mathematical calculations on date and time
+SELECT name, birthdate, YEAR(birthdate + INTERVAL 21 YEAR) AS will_be_21_years FROM people;
+
+-- timestamp() takes less space and has less range than datetime()
+CREATE TABLE captions(
+    text VARCHAR(200),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP()
+);
+
+INSERT INTO captions(text) VALUES(
+    "Binge watching"
+);
+
+INSERT INTO captions(text) VALUES(
+    "Rizzing up the sun"
+);
+
+SELECT * FROM captions;
+
+-- updated_at()
+CREATE TABLE captions2(
+    text VARCHAR(200),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
+    updated_at TIMESTAMP ON UPDATE CURRENT_TIMESTAMP()
+);
+-- CHALLENGE
+
+--DISPLAY CURENT TIME
+SELECT CURTIME();
+
+-- DISPLAY CURRENT DATE
+SELECT CURDATE();
+ 
+-- DISPLAY DAY OF WEEK IN NUMERICAL FORM
+SELECT DAYOFWEEK(CURDATE());
+
+SELECT DAYOFWEEK(NOW());
+
+SELECT DATE_FORMAT(NOW(), '%w') + 1;
+
+-- DISPLAY NAME OF THE DAY
+SELECT DAYNAME(NOW());
+SELECT DATE_FORMAT(NOW(), '%W');
+
+ 
+SELECT DATE_FORMAT(CURDATE(), '%m/%d/%Y');
+ 
+
+ -- DISPLAY DATE IN FEB 25TH AT 10:15
+SELECT DATE_FORMAT(NOW(), '%M %D at %k:%i');
+ 
+
+ --TABLE tweets
+CREATE TABLE tweets(
+    content VARCHAR(140),
+    username VARCHAR(20),
+    created_at TIMESTAMP DEFAULT NOW()
+);
+ 
+INSERT INTO tweets (content, username) VALUES('this is my first tweet', 'coltscat');
+SELECT * FROM tweets;
+ 
+INSERT INTO tweets (content, username) VALUES('this is my second tweet', 'coltscat');
+SELECT * FROM tweets;
