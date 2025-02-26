@@ -1,0 +1,167 @@
+USE bookshop;
+
+-- not equal to
+SELECT * FROM books WHERE released_year != 2017;
+
+-- NOTLIKE
+SELECT * FROM books WHERE author_fname NOT LIKE 'dA%';
+
+-- book title without letter 'e'
+SELECT title FROM books WHERE title NOT LIKE '%E%';
+
+-- greater than
+SELECT title FROM books WHERE released_year > 2005 ORDER BY released_year;
+
+-- greater than/ equal to
+SELECT title, released_year FROM books WHERE released_year >= 2010;
+
+-- logical operators
+-- logical and operator
+SELECT title, released_year, author_lname FROM books
+WHERE author_lname = 'Eggers'
+AND released_year > 2010;
+
+SELECT title, author_lname, released_year FROM books
+WHERE released_year > 2010
+AND author_lname = 'Eggers'
+AND title LIKE '%novel%';
+
+
+-- logical OR operator
+SELECT title, author_lname, released_year FROM books
+WHERE author_lname = 'Eggers'
+OR released_year > 2010;
+
+-- BETWEEN X AND Y
+SELECT title, released_year FROM books
+WHERE released_year BETWEEN 2010 AND 2020;
+
+-- NOT BETWEEN 
+SELECT title, released_year FROM books
+WHERE released_year NOT BETWEEN 2010 AND 2020;
+
+-- COMPARING date and time
+USE practice;
+
+SELECT * FROM people WHERE year(birthdate) < 2005;
+SELECT * FROM people;
+SELECT name, birthtime FROM people
+WHERE hour(birthtime) > 12;
+
+-- cast
+SELECT CAST('09:10:50' AS TIME);
+
+SELECT * FROM people WHERE birthtime 
+BETWEEN CAST('12:00:00' AS TIME) 
+AND CAST('16:00:00' AS TIME);
+ 
+-- SAME OUTPUT AS PEVIOUS CODE
+SELECT * FROM people WHERE HOUR(birthtime)
+BETWEEN 12 AND 16; 
+
+
+-- bookshop database
+
+SELECT  title, author_lname FROM books
+WHERE author_lname = 'Smith'
+OR author_lname = 'Carver'
+OR author_lname = 'Lahiri';
+
+--  IN operator
+SELECT title, author_lname FROM books
+WHERE author_lname IN ('Smith','Carver', 'Lahiri');
+
+-- antithesis of IN: NOT IN operator
+SELECT title, author_lname FROM books
+WHERE author_lname NOT IN ('Smith','Carver', 'Lahiri');
+
+-- MODULUS and NOT IN
+SELECT title, released_year FROM books
+WHERE released_year > 2000
+AND released_year % 2 != 0;
+
+-- CASE statement
+SELECT title, released_year,
+CASE
+	WHEN released_year > 2000 THEN 'Modern Lit'
+    ELSE '20th Century Lit'
+END AS genre
+FROM books;
+
+
+-- stock_quantity between 0-50 '*'
+-- sq between 50- 100 '**'
+-- sq more than that '***'
+SELECT 
+    title,
+    stock_quantity,
+    CASE
+        WHEN stock_quantity BETWEEN 0 AND 50 THEN '*'
+        WHEN stock_quantity BETWEEN 50 AND 100 THEN '**'
+        ELSE '***'
+    END AS stock_stars
+FROM
+    books;
+
+-- skip the BETWEEN AND
+SELECT 
+    title,
+    stock_quantity,
+    CASE
+        WHEN stock_quantity <= 40 THEN '*'
+        WHEN stock_quantity <= 70 THEN '**'
+        WHEN stock_quantity <= 100 THEN '***'
+        WHEN stock_quantity <= 140 THEN '****'
+        ELSE '*****'
+    END AS stock_stars
+FROM
+    books;
+
+
+-- CHALLENGE
+-- Display all books released before 1980
+SELECT title, released_year FROM books
+WHERE released_year < 1980;
+
+-- Display all books written by Eggers OR Chabon
+SELECT title, author_lname FROM books
+WHERE author_lname IN ('Eggers', 'Chabon');
+
+-- Display books written by Lahiri after 2000
+SELECT title, author_lname, released_year FROM books
+WHERE author_lname = 'Lahiri'
+AND released_year > 2000;
+
+
+-- Display all books with page count b/w 100-200
+SELECT title, pages FROM books
+WHERE pages BETWEEN 100 AND 200;
+
+-- Display books where author_lname starts with C or S
+SELECT title, author_lname FROM books
+WHERE author_lname LIKE 'C%'
+OR author_lname LIKE 'S%';
+
+-- Display using CASE the following:
+-- if the title contains 'stories' -> short_stories
+-- if 'just kids' and 'heartbreaking work' -> memoir
+-- everything else -> novel
+
+SELECT title, author_lname,
+CASE
+	WHEN title LIKE '%stories%' THEN 'short stories'
+    WHEN title IN ('just kids', 'a heartbreaking work of staggering genius') THEN 'memoir'
+    ELSE 'novel'
+END AS type
+FROM books;
+
+-- Display author_fname, author_lname and the books they wrote as count 
+SELECT author_fname, author_lname,
+	CASE
+        WHEN COUNT(*) = 1 THEN '1 book'
+        ELSE CONCAT(COUNT(*), ' books')
+	END AS count
+FROM books
+WHERE author_lname IS NOT NULL
+GROUP BY author_fname, author_lname;
+
