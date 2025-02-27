@@ -1,0 +1,83 @@
+USE practice;
+
+
+-- check conditionality of a data
+CREATE TABLE palindrome_users (
+	name VARCHAR(30) NOT NULL,
+    age INT CHECK (age> 0),
+    -- check if a text is PALINDROME
+    word VARCHAR(100) CHECK (REVERSE(word) = word)
+    );
+
+-- gives an error due to negative value and the effect of CHECK constraint    
+INSERT INTO palindrome_users (name, age, word) VALUES( 'Roy', 30, 'mom');
+
+-- CONSTRAINT names
+CREATE TABLE partiers(
+	name VARCHAR(100) NOT NULL,
+    age INT,
+    CONSTRAINT not_old_enough CHECK (age > 18)
+    );
+
+INSERT INTO partiers( name, age) VALUES ( 'Roy', 21);
+
+-- CONSTRAINT UNIQUE COMBO
+CREATE TABLE company(
+	name VARCHAR(100),
+    address VARCHAR(100),
+    CONSTRAINT already_exists_in_database UNIQUE(name, address)
+);
+
+INSERT INTO company( name, address) VALUES ('raizada mkt', '45 china tui');
+INSERT INTO company( name, address) VALUES ('zada bakery', '45 china tui');
+INSERT INTO company( name, address) VALUES ('raizada mkt', 'china tui');
+INSERT INTO company( name, address) VALUES ('raizada mkt', 'china tui');
+
+CREATE TABLE houses (
+  purchase_price INT NOT NULL,
+  sale_price INT NOT NULL,
+  CONSTRAINT sprice_gt_pprice CHECK(sale_price >= purchase_price)
+);
+
+-- Alter table command
+ALTER TABLE company ADD COLUMN city VARCHAR(30); 
+ALTER TABLE company ADD COLUMN phone INT NOT NULL;
+
+SELECT * FROM company;
+
+ALTER TABLE company
+ADD COLUMN employee_count INT NOT NULL DEFAULT 1;
+
+-- ALTER and DROP
+ALTER TABLE company
+DROP COLUMN phone;
+
+DESC company;
+
+-- RENAME TABLE
+RENAME TABLE company TO companies;
+
+DESC companies;
+
+-- RENAME using ALTER
+ALTER TABLE companies RENAME TO company;
+
+-- RENAME A column
+ALTER TABLE company 
+RENAME COLUMN name TO company_name;
+
+-- Modify a column's datatype
+ALTER TABLE company
+MODIFY company_name VARCHAR(90) NOT NULL DEFAULT 'UNKNOWN';
+
+-- CHANGE col-name and col-datatype, CHANGE OLD_COL_NAME NEW_COL_NAME
+ALTER TABLE company
+CHANGE address company_address VARCHAR(70) NOT NULL DEFAULT 'MISSING VALUE';
+
+-- ADD/DROP CONSTRAINTS
+ALTER TABLE houses 
+ADD CONSTRAINT positive_pprice CHECK (purchase_price >= 0);
+
+ALTER TABLE houses DROP CONSTRAINT positive_pprice;
+
+
