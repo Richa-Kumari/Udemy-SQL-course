@@ -143,5 +143,66 @@ HAVING num_likes = (SELECT
         COUNT(*)
     FROM
         photos);
+
+
+-- ig_clone_triggers
+-- trigger ig data
+-- add condition so that a person is not able to follow themselves
+
+
+SHOW TABLES;
+
+DELIMITER $$
+
+CREATE TRIGGER prevent_self_follow
+	BEFORE INSERT ON follows FOR EACH ROW
+    BEGIN
+		IF NEW.follower_id = NEW.followee_id
+        THEN 
+			SIGNAL SQLSTATE '45000' -- sqlstate is sed to tell sql which error to be initiated
+				SET MESSAGE_TEXT = "User cannot follow themselves!";
+		END IF;
+	END;
+
+$$
+DELIMITER ;
+
+INSERT INTO follows(follower_id, followee_id) VALUES(7,2);
+
+-- table unfollows()
+CREATE TABLE unfollows (
+    follower_id INTEGER NOT NULL,
+    followee_id INTEGER NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW(),
+    FOREIGN KEY(follower_id) REFERENCES users(id),
+    FOREIGN KEY(followee_id) REFERENCES users(id),
+    PRIMARY KEY(follower_id, followee_id)
+);
+
+DELIMITER $$
+
+CREATE TRIGGER capture_unfollow
+	AFTER DELETE ON follows FOR EACH ROW
+    BEGIN
+    -- method 1
+		-- INSERT INTO unfollow(follower_id, followee_id)
+			-- VALUES( OLD.follower_id, OLD.followee_id)
+		-- method 2
+			INSERT INTO unfollows
+				SET follower_id = OLD.follower_id,
+					followee_id = OLD.followee_id;
+	END $$
+DELIMITER ;
+
+SELECT * FROM follows LIMIT 5;
+
+-- experiment sake
+DELETE FROM follows WHERE follower_id= 2 AND followee_id = 1;
+
+SELECT * FROM unfollows;
+
+SHOW TRIGGERS;
+
+-- DROP TRIGGER trigger_name
         
 
