@@ -1,0 +1,64 @@
+-- create database
+CREATE DATABASE shirts_db;
+ 
+-- use database
+USE shirts_db;
+
+
+--create table
+CREATE TABLE shirts(shirt_id INT PRIMARY KEY, article varchar(30), color varchar(25), shirt_size varchar(1), times_worn int );
+
+-- insert values into table, can use AUTO_INCREMENT 
+INSERT INTO shirts(shirt_id, article, color, shirt_size, times_worn) VALUES
+    (1, "tshirt","white","S",10),
+    (2, "tshirt","green","S",200),
+    (3, "polo shirt","black","M",10),
+    (4, "tank top","blue","S",50),
+    (5, "tshirt","pink","S",0),
+    (6, "polo shirt","red","M",5),
+    (7, "tanktop","white","S",200),
+    (8, "tanktop","blue","M",15)
+;
+
+
+--Display values from table
+SELECT * FROM shirts;
+
+
+--Insert value in table
+INSERT INTO shirts VALUES(9,"polo shirt", "purple", "M", 50);
+
+--Display selected columns
+SELECT article, color from shirts;
+
+-- Display selected columns with a condition using Where clause
+SELECT article, color, shirt_size, times_worn from shirts 
+WHERE shirt_size = "M";
+
+
+-- Update values, satisfying certain conditions using Where, UPDATE and SET
+UPDATE shirts 
+SET shirt_size = "L"
+WHERE article = "polo shirt";
+
+UPDATE shirts
+SET times_worn = 0
+WHERE times_worn = 15;
+
+UPDATE shirts
+SET shirt_size = "T", color = "off white"
+WHERE color = "white";
+
+
+-- Delete from table using WHERE condition 
+DELETE FROM shirts
+WHERE times_worn >= 200;
+
+DELETE FROM shirts
+WHERE article = "tanktop";
+
+-- DELETED table without deleting it's structure (only data)
+DELETE FROM shirts;
+
+-- Drop Table 
+DROP TABLE shirts;
