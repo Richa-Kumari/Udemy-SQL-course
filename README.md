@@ -1,77 +1,68 @@
-# Udemy-SQL-course
-Overview
+# MySQL Comprehensive Course Overview
 
-This repository contains SQL queries for managing and retrieving data from a bookshop database. The queries cover basic CRUD operations, filtering, sorting, and various SQL techniques to refine data selections.
+## Introduction
 
-Table Schema
+This repository contains summaries, notes, and practice exercises from the Udemy course on MySQL that I completed. The course provided an in-depth understanding of MySQL, covering everything from basic SQL queries to advanced database administration.
 
-The database consists of a books table with the following fields:
+## Table of Contents
 
-title (VARCHAR) - The title of the book
 
-author_fname (VARCHAR) - The first name of the author
+## Course Overview
 
-author_lname (VARCHAR) - The last name of the author
+The course titled "MySQL: The Ultimate MySQL Course" provided a comprehensive guide to MySQL, covering both foundational concepts and advanced topics. It included practical exercises and real-world examples to reinforce learning.
 
-released_year (INT) - The year the book was released
+## Installation and Setup
 
-stock_quantity (INT) - The number of copies in stock
+- **MySQL Installation**: Steps to install MySQL on various operating systems.
+- **MySQL Workbench**: Overview and setup instructions.
+- **Command-Line Tools**: Introduction to MySQL command-line utilities.
 
-pages (INT) - The total number of pages
+## Database Fundamentals
 
-SQL Queries
+- **Relational Database Management Systems (RDBMS)**: Understanding the basics of RDBMS.
+- **SQL Basics**: Introduction to Structured Query Language (SQL).
 
-1. Inserting Sample Data
+## Data Definition Language (DDL)
 
-INSERT INTO books (title, author_fname, author_lname, released_year, stock_quantity, pages)
-VALUES ('10% Happier', 'Dan', 'Harris', 2014, 29, 256),
-       ('fake_book', 'Freida', 'Harris', 2001, 287, 428),
-       ('Lincoln In The Bardo', 'George', 'Saunders', 2017, 1000, 367);
+- **Creating Databases and Tables**: Syntax and best practices.
+- **Data Types**: Overview of MySQL data types.
+- **Constraints**: Implementing primary keys, foreign keys, unique constraints, and more.
 
-2. Retrieving Unique Author Names
+## Data Manipulation Language (DML)
 
-SELECT DISTINCT CONCAT(author_fname, ' ', author_lname) AS author_name FROM books;
+- **Inserting Data**: Techniques for adding data to tables.
+- **Updating Data**: Modifying existing data.
+- **Deleting Data**: Removing data from tables.
 
-Alternative:
+## Data Query Language (DQL)
 
-SELECT DISTINCT author_fname, author_lname FROM books;
+- **SELECT Statements**: Basic and advanced usage.
+- **Filtering Data**: Using WHERE clauses.
+- **Sorting Data**: ORDER BY clause.
+- **Grouping Data**: GROUP BY and HAVING clauses.
 
-3. Sorting Data
+## Joins and Subqueries
 
-SELECT author_fname, released_year, title FROM books ORDER BY released_year;
+- **Joins**: INNER JOIN, LEFT JOIN, RIGHT JOIN, and FULL JOIN.
+- **Subqueries**: Correlated and non-correlated subqueries.
 
-4. Limiting Results
 
-SELECT title FROM books ORDER BY released_year LIMIT 5;
 
-5. Using LIKE for Filtering
 
-SELECT title, author_fname FROM books WHERE author_fname LIKE '%da%';
 
-6. Advanced Queries
+## Stored Procedures and Functions
 
-Finding the longest book:
+- **Stored Procedures**: Creating and using stored procedures.
+- **Functions**: Defining and using functions in MySQL.
 
-SELECT title, pages FROM books ORDER BY pages DESC LIMIT 1;
+## Triggers and Events
 
-Displaying a summary of the 3 most recent books:
+- **Triggers**: Creating triggers for automated actions.
+- **Events**: Scheduling events in MySQL.
 
-SELECT CONCAT(title, ' - ', released_year) AS SUMMARY FROM books ORDER BY released_year DESC LIMIT 3;
 
-Best Practices
+.
 
-Use column names instead of positional ordering in ORDER BY.
+---
 
-Utilize aliases (AS) for better readability.
 
-Be mindful of wildcard usage in LIKE queries.
-
-Use LIMIT for efficient result handling.
-
-Contributing
-
-Feel free to contribute by adding more queries or optimizing existing ones.
-
-License
-
-This project is open-source and available under the MIT License.
